@@ -31,6 +31,8 @@ export default class App extends Component{
         completed: false
       },
     ],
+
+    value: ""
   }
 
   handleClick = (id) =>{
@@ -38,6 +40,27 @@ export default class App extends Component{
     console.log("뉴투두데이터",newTodoData);
     this.setState({todoDatas: newTodoData});
   }
+
+  handleChange = (e) =>{
+    console.log("입력시 발생하는 이벤트",e.target.value);
+    this.setState({value:e.target.value})
+  }
+
+  handleSubmit =(e) =>{
+    // form안에 input을 전송할 때 페이지 리로드 되는 것을 막아준다.
+    e.preventDefault();
+
+    //새로운 할일
+    let newTodo={
+      id: Date.now(), // 유니크한 값 :: 현재 날짜
+      title: this.state.value,
+      completed: false,
+    };
+
+    //새로운 할 일 더해주기.
+    this.setState({ todoDatas: [...this.state.todoDatas, newTodo]})
+  }
+
   render(){
     return(
       <div className="container">
@@ -53,6 +76,24 @@ export default class App extends Component{
             <button style={this.btnStyle} onClick={()=>this.handleClick(data.id)}>x</button>
           </div>
         ))}
+
+{/* Todo리스트 추가하는 부분 */}
+          <form style={{display:'flex'}} onSubmit={this.handleSubmit}>
+            <input type="text" name="value" 
+            style={{flex:'10', padding:'5px'}}
+            placeholder="Please enter what you need to do"
+            value={this.state.value}
+            onChange={this.handleChange}
+            />
+          
+            <input type="submit"
+            value="입력"
+            className="btn"
+            style={{flex: '1'}}
+            />
+
+          </form>
+
 
         </div>
       </div>
