@@ -18,19 +18,26 @@ export default class App extends Component{
       textDecoration:"none"
     }
   }
+  state={
+    todoDatas : [
+      {
+        id:"1",
+        title:"공부하기",
+        completed: true
+      },
+      {
+        id:"2",
+        title:"청소하기",
+        completed: false
+      },
+    ],
+  }
 
-  todoData =[
-    {
-      id:"1",
-      title:"공부하기",
-      completed: true
-    },
-    {
-      id:"2",
-      title:"청소하기",
-      completed: false
-    }
-  ]
+  handleClick = (id) =>{
+    let newTodoData=this.state.todoDatas.filter(data => data.id !== id)
+    console.log("뉴투두데이터",newTodoData);
+    this.setState({todoDatas: newTodoData});
+  }
   render(){
     return(
       <div className="container">
@@ -39,11 +46,11 @@ export default class App extends Component{
             <h1>ToDo List</h1>
           </div>
 
-        {this.todoData.map((data) =>(
+        {this.state.todoDatas.map((data) =>(
           <div style={this.getStyle()} key={data.id}>
             <input type="checkbox" defaultChecked={false} />
               {data.title}
-            <button style={this.btnStyle}>x</button>
+            <button style={this.btnStyle} onClick={()=>this.handleClick(data.id)}>x</button>
           </div>
         ))}
 
