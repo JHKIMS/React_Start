@@ -11,27 +11,15 @@ export default class App extends Component{
     float: "right"
   }
 
-  getStyle = () =>{
+  getStyle = (completed) =>{
     return{
       padding:"10px",
       borderBottom:"1px #ccc dotted",
-      textDecoration:"none"
+      textDecoration: completed ? "line-through":"none",
     }
   }
   state={
-    todoDatas : [
-      {
-        id:"1",
-        title:"공부하기",
-        completed: true
-      },
-      {
-        id:"2",
-        title:"청소하기",
-        completed: false
-      },
-    ],
-
+    todoDatas : [],
     value: ""
   }
 
@@ -58,7 +46,17 @@ export default class App extends Component{
     };
 
     //새로운 할 일 더해주기.
-    this.setState({ todoDatas: [...this.state.todoDatas, newTodo]})
+    this.setState({ todoDatas: [...this.state.todoDatas, newTodo], value:""})
+  }
+
+  handleCompleChange = (id) => {
+    let newTodoData = this.state.todoDatas.map((data) => {
+      if(data.id === id){
+        data.completed = !data.completed;
+      }
+      return data;
+    });
+    this.setState({todoDatas: newTodoData})
   }
 
   render(){
@@ -70,8 +68,8 @@ export default class App extends Component{
           </div>
 
         {this.state.todoDatas.map((data) =>(
-          <div style={this.getStyle()} key={data.id}>
-            <input type="checkbox" defaultChecked={false} />
+          <div style={this.getStyle(data.completed)} key={data.id}>
+            <input type="checkbox" defaultChecked={false} onChange={()=>this.handleCompleChange(data.id)} />
               {data.title}
             <button style={this.btnStyle} onClick={()=>this.handleClick(data.id)}>x</button>
           </div>
@@ -80,10 +78,10 @@ export default class App extends Component{
 {/* Todo리스트 추가하는 부분 */}
           <form style={{display:'flex'}} onSubmit={this.handleSubmit}>
             <input type="text" name="value" 
-            style={{flex:'10', padding:'5px'}}
-            placeholder="Please enter what you need to do"
-            value={this.state.value}
-            onChange={this.handleChange}
+                  style={{flex:'10', padding:'5px'}}
+                  placeholder="Please enter what you need to do"
+                  value={this.state.value}
+                  onChange={this.handleChange}
             />
           
             <input type="submit"
